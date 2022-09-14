@@ -13,6 +13,12 @@ const std::string Args::Name::NAMESPACE_DEFAULT = "DEFAULT";
 const std::string Args::Name::CATCH_SIGINT_COUNT = "catch_sigint_cnt";
 const std::string Args::Name::CATCH_SIGINT_COUNT_SHORT = "sig_cnt";
 
+const std::string Args::Name::PORT = "port";
+const std::string Args::Name::PORT_SHORT = "p";
+
+const std::string Args::Name::ADDRESS = "address";
+const std::string Args::Name::ADDRESS_SHORT = "a";
+
 Param::Param(const std::string &name, const std::string &short_name)
         : m_name(name), m_short(short_name) {
     ;

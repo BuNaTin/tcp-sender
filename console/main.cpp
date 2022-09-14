@@ -21,8 +21,18 @@ bool processArgs(Args &args, int argc, char *argv[]) noexcept {
 
     return true;
 }
+bool checkNecArgs(const Args& args) noexcept {
+    if (!args.has(ARG_CONFIG_FILE)) {
+        std::cout << "Should have " ARG_CONFIG_FILE " argument"
+                  << std::endl;
+        return false;
+    }
+
+    return true;
+}
 
 int main(int argc, char *argv[]) {
+    checkBytes();
     Args args;
     if (!processArgs(args, argc, argv)) {
         std::cerr << args.defaultHelp() << std::endl;
@@ -34,12 +44,10 @@ int main(int argc, char *argv[]) {
         return 0;
     }
 
-    if (!args.has(ARG_CONFIG_FILE)) {
-        std::cout << "Should have " ARG_CONFIG_FILE " argument"
-                  << std::endl;
+    if (!checkNecArgs(args)) {
         std::cerr << args.defaultHelp() << std::endl;
         return 1;
-    }
+    } 
 
     auto application = tcp_sender::Application::Builder()
                                .setConfig(args.get(ARG_CONFIG_FILE))

@@ -93,5 +93,11 @@ public:
 
     static const std::string CATCH_SIGINT_COUNT;
     static const std::string CATCH_SIGINT_COUNT_SHORT;
+
+    static const std::string PORT;
+    static const std::string PORT_SHORT;
+
+    static const std::string ADDRESS;
+    static const std::string ADDRESS_SHORT;
 };
 

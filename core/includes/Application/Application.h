@@ -6,6 +6,7 @@
 
 #include <Application/Args.h>
 #include <Config/IniConf.h>
+#include <Application/types.h>
 
 namespace tcp_sender {
 
@@ -34,6 +35,8 @@ private:
     const Args* m_args;
     std::unique_ptr<IniConf> m_config;
     std::size_t m_sig_max;
+    std::string m_address;
+    short m_port;
 };
 
 } // namespace Mib3
