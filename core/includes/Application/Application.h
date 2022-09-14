@@ -7,7 +7,7 @@
 #include <Application/Args.h>
 #include <Config/IniConf.h>
 
-namespace my_project {
+namespace tcp_sender {
 
 class Application {
     // interface

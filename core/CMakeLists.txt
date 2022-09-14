@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
-set(CORE_LIB my_project-core)
+set(CORE_LIB tcp_sender-core)
 
 set(INC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/includes)
 set(SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)

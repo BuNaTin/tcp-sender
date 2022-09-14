@@ -1,6 +1,6 @@
 #include "Config/IniConf.h"
 
-namespace my_project {
+namespace tcp_sender {
     // INICONF
     IniConf::IniConf(const std::string &filename) {
         std::ifstream in(filename);

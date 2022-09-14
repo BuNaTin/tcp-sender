@@ -86,7 +86,7 @@ std::vector<T> cast_to_vec(const std::string &data) {
 
 } // namespace
 
-namespace my_project {
+namespace tcp_sender {
 
 /**
  * @brief Parsing .ini configuration files

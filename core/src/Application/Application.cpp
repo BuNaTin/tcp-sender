@@ -21,7 +21,7 @@ std::function<void(int)> shutdown_handler;
 void signal_handler(int signal) { shutdown_handler(signal); }
 } // namespace
 
-namespace my_project {
+namespace tcp_sender {
 
 class ApplicationImpl final : public Application {
     // interface

@@ -41,7 +41,7 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    auto application = my_project::Application::Builder()
+    auto application = tcp_sender::Application::Builder()
                                .setConfig(args.get(ARG_CONFIG_FILE))
                                .setArgs(args)
                                .build();
