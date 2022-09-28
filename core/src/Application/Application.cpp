@@ -14,6 +14,8 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <vector>
+#include <chrono>
+#include <thread>
 
 #include <utils/strFromHex.hpp>
 
@@ -68,6 +70,7 @@ private:
     std::size_t m_sig_max = size_t_max();
     const int m_socket_fd;
     sockaddr_in m_serv_addr;
+    u32 m_latency;
 };
 
 using ABuilder = Application::Builder;
@@ -165,41 +168,37 @@ ApplicationImpl::ApplicationImpl(std::unique_ptr<IniConf> &&conf,
     signal(SIGINT, signal_handler);
     m_sig_handler.test_and_set(std::memory_order_acquire);
 
-    std::vector<std::string> names =
-            (*conf)("DEFAULT")("packages").as<std::string[]>();
+    m_latency = (*conf)("DEFAULT")("latency").as<u32>();
 
-    auto getData = [this](const std::string &name) {
-        std::ifstream in(name);
-        if (!in) {
-            return;
-        }
-        std::string buffer;
-        std::string data;
+    std::vector<std::string> data_list =
+            (*conf)("DEFAULT")("data").as<std::string[]>();
+    
+    if(!(*conf)("DEFAULT").has("data")) {
+        std::cerr << "No hex" << std::endl;
+    }
 
-        while (in >> buffer) {
-            data += utils::strFromHex(buffer);
-        }
-
-        m_data.push_back(data);
+    auto getData = [](const std::string &hex)->std::string {
+        std::cout << "Get data: " << hex << std::endl;
+        return utils::strFromHex(hex);
     };
-
-    std::for_each(names.begin(), names.end(), getData);
+    std::transform(data_list.begin(), data_list.end(), std::back_inserter(m_data), getData);
 }
 
 bool ApplicationImpl::start() noexcept {
     std::cout << "Start work" << std::endl;
 
     auto sendhex = [this](const std::string &hex) -> bool {
-        std::cout << "Send [" << hex << "]\n";
+        std::this_thread::sleep_for(std::chrono::milliseconds(m_latency));
+        std::cout << "Send [" << hex.size() << "]\n";
         if (sendto(m_socket_fd,
                    hex.c_str(),
                    hex.size(),
                    MSG_EOR,
                    (struct sockaddr *)&m_serv_addr,
                    sizeof(m_serv_addr)) < 0) {
-            return false;
+            return true;
         }
-        return true;
+        return false;
     };
 
     auto it = std::find_if(m_data.begin(), m_data.end(), sendhex);
@@ -208,6 +207,8 @@ bool ApplicationImpl::start() noexcept {
     }
 
     std::cout << "End work" << std::endl;
+
+    std::this_thread::sleep_for(std::chrono::seconds(15));
     return true;
 }
 
